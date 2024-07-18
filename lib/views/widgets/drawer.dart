@@ -165,10 +165,3 @@ class _MyDrawerState extends State<MyDrawer> {
 
 
 
-/* MyEvents()  ga o'tganda  ko'rsadsin  manshu dasturga kirish user kirtgan 
-tadbirlarni fail besdan olib kirib  agar boshqa user tadbir kirtgan bo'lsa uni tadbirlari ko'rinmasin 
-boshqa user bilan kirsa shu user kirtgan tadbir ko'rinsin. dadbirlarni o'chirish o'zgartirish imkoni bo'lsin 1-rasm dek va ishtrok etgan qilish bekor qilingan qish imkoni bo'lsin  
-  Add icon bosganda Failbesga tadbir qo'shsin  
-2-rasimdek  Tadbir nomi, datatim bilan kuni  vaxri   Image icon bossa galeradan rasiolib shuni , 
-camera icon bossa cameradan rasim olib shuni   va haritadan  locatsiya icon bilan manzil tanlasin va shumanzilni qo'shni .2-rasm dek 
-fayilarni aloxida yoz*/
