@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "560181459669",
+    "project_id": "acquired-router-428913-r8",
+    "storage_bucket": "acquired-router-428913-r8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:560181459669:android:ddfc6a1922924cd152005c",
+        "android_client_info": {
+          "package_name": "com.example.imtixon_4"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2qp7jT9ycrBXbSQwhPW5HS99fUBzZQfE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
