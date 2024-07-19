@@ -4,37 +4,40 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:imtixon_4/cubt/theme_cubit.dart';
 import 'package:imtixon_4/services/firebase_auth_service.dart';
-import 'package:imtixon_4/services/firebase_service.dart'; // Import FirebaseService
+import 'package:imtixon_4/services/firebase_service.dart';
 import 'package:imtixon_4/views/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
+  // Flutter va Firebase initializatsiyasini bajarish
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  await EasyLocalization.ensureInitialized();
+  await Firebase.initializeApp(); // Firebase'ni inicializatsiya qilish
+  await EasyLocalization
+      .ensureInitialized(); // EasyLocalization'ni inicializatsiya qilish
 
   runApp(
     EasyLocalization(
       supportedLocales: [
-        Locale(
-          'en',
-        ),
-        Locale(
-          'uz',
-        ),
-        Locale(
-          'ru',
-        ),
+        Locale('en'),
+        Locale('uz'),
+        Locale('ru'),
       ],
       path: 'assets/translation',
-      fallbackLocale: Locale('uz'),
-      startLocale: Locale('uz'),
+      fallbackLocale:
+          Locale('uz'), // Agar til mavjud bo'lmasa, fallback tilni o'rnatish
+      startLocale:
+          Locale('uz'), // Ilovaning boshlang'ich tilini o'zbek tiliga o'rnatish
       child: MultiProvider(
         providers: [
-          Provider(create: (_) => FirebaseAuthService()),
           Provider(
-              create: (_) => FirebaseService()), // Add FirebaseService here
-          BlocProvider(create: (context) => ThemeCubit()),
+              create: (_) =>
+                  FirebaseAuthService()), // FirebaseAuthService ni Provider orqali yaratish
+          Provider(
+              create: (_) =>
+                  FirebaseService()), // FirebaseService ni Provider orqali yaratish
+          BlocProvider(
+              create: (context) =>
+                  ThemeCubit()), // ThemeCubit ni BlocProvider orqali yaratish
         ],
         child: const MyApp(),
       ),
@@ -50,9 +53,11 @@ class MyApp extends StatelessWidget {
     return BlocBuilder<ThemeCubit, bool>(
       builder: (context, isDark) {
         return MaterialApp(
-          localizationsDelegates: context.localizationDelegates,
-          supportedLocales: context.supportedLocales,
-          locale: context.locale,
+          localizationsDelegates: context
+              .localizationDelegates, // Lokalizatsiya uchun delegatlarni o'rnatish
+          supportedLocales: context
+              .supportedLocales, // Qo'llab-quvvatlanadigan tillarni o'rnatish
+          locale: context.locale, // Hozirgi tilni o'rnatish
           theme: isDark ? ThemeData.dark() : ThemeData.light(),
           debugShowCheckedModeBanner: false,
           home: SplashScreen(),
