@@ -17,7 +17,7 @@ class _ChangeLanguageScreenState extends State<ChangeLanguageScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text('Don\'t have an account?').tr(),
+            Text("Language Exchange".tr()),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
@@ -33,7 +33,7 @@ class _ChangeLanguageScreenState extends State<ChangeLanguageScreen> {
                   'uz',
                 ));
               },
-              child: Text('O\'zbekcha'),
+              child: Text("O'zbekcha"),
             ),
             ElevatedButton(
               onPressed: () {

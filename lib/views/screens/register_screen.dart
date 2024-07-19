@@ -12,31 +12,40 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  // Matn kiritish maydonlarini boshqarish uchun kontrollerlar
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final passwordConfirmationController = TextEditingController();
 
+  // Ro'yxatdan o'tish funksiyasi
   void submit() async {
+    // Agar email, parol va parolni tasdiqlash maydonlari to'ldirilgan va parollar bir xil bo'lsa
     if (emailController.text.isNotEmpty &&
         passwordController.text.isNotEmpty &&
         passwordConfirmationController.text.isNotEmpty &&
         passwordController.text == passwordConfirmationController.text) {
       try {
+        // Foydalanuvchini Firebase orqali ro'yxatdan o'tkazing
         User? user = await context.read<FirebaseAuthService>().register(
               emailController.text,
               passwordController.text,
             );
+        // Agar foydalanuvchi muvaffaqiyatli ro'yxatdan o'tgan bo'lsa, orqaga qaytish
         if (user != null) {
           Navigator.pop(context);
         } else {
+          // Ro'yxatdan o'tishda xatolik bo'lsa, xabarni ko'rsatish
           TestHelpers.showErrorDialog(context, "Ro'yxatdan o'tishda xatolik");
         }
       } on FirebaseAuthException catch (error) {
+        // Firebase xatoliklarini ko'rsatish
         TestHelpers.showErrorDialog(context, error.message ?? "Xatolik");
       } catch (e) {
+        // Umumiy tizim xatoliklarini ko'rsatish
         TestHelpers.showErrorDialog(context, "Tizimda xatolik");
       }
     } else {
+      // Agar parollar bir xil bo'lmasa, xabarni ko'rsatish
       TestHelpers.showErrorDialog(context, "Parollar bir xil bo'lishi kerak");
     }
   }

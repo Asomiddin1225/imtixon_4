@@ -26,7 +26,7 @@ void main() async {
           'ru',
         ),
       ],
-      path: 'assets/translation', // JSON fayllar joylashgan yo'l
+      path: 'assets/translation',
       fallbackLocale: Locale('uz'),
       startLocale: Locale('uz'),
       child: MultiProvider(

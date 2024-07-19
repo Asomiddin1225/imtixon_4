@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:imtixon_4/models/event.dart';
 import 'package:imtixon_4/services/firebase_service.dart';
@@ -11,19 +12,23 @@ class EventListScreen extends StatefulWidget {
   _EventListScreenState createState() => _EventListScreenState();
 }
 
+// EventListScreen uchun holatni boshqaradi
 class _EventListScreenState extends State<EventListScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
+  //  dastlabki sozlamalarni amalga oshiradi
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
+    // FirebaseService orqali foydalanuvchi tadbirlarini olish
     Future.delayed(Duration.zero, () async {
       await context.read<FirebaseService>().getUserEvents();
     });
   }
 
+  // tadbirlarni berilgan filtrga qarab ajratib beradi
   List<Event> filterEvents(List<Event> events, String filter) {
     final now = DateTime.now();
     if (filter == 'Asosiy') {
@@ -59,17 +64,18 @@ class _EventListScreenState extends State<EventListScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mening tadbirlarim'),
+        title: Text('My events'.tr()),
         bottom: TabBar(
           controller: _tabController,
           tabs: [
-            Tab(text: 'Asosiy'),
-            Tab(text: 'Yaqinda'),
-            Tab(text: 'Ishtirok etgan'),
-            Tab(text: 'Bekor qilgan'),
+            Tab(text: 'Main'.tr()),
+            Tab(text: 'Recently'.tr()),
+            Tab(text: 'Participated'.tr()),
+            Tab(text: 'cancelled'.tr()),
           ],
         ),
       ),
+      //  FirebaseService orqali tadbirlarni yuklash
       body: FutureBuilder<List<Event>>(
         future: Provider.of<FirebaseService>(context).getUserEvents(),
         builder: (context, snapshot) {
@@ -83,15 +89,17 @@ class _EventListScreenState extends State<EventListScreen>
             return TabBarView(
               controller: _tabController,
               children: [
-                buildEventList(filterEvents(snapshot.data!, 'Asosiy')),
-                buildEventList(filterEvents(snapshot.data!, 'Yaqinda')),
-                buildEventList(filterEvents(snapshot.data!, 'Ishtirok etgan')),
-                buildEventList(filterEvents(snapshot.data!, 'Bekor qilingan')),
+                buildEventList(filterEvents(snapshot.data!, 'Main'.tr())),
+                buildEventList(filterEvents(snapshot.data!, 'Recently'.tr())),
+                buildEventList(
+                    filterEvents(snapshot.data!, 'Participated'.tr())),
+                buildEventList(filterEvents(snapshot.data!, 'cancelled'.tr())),
               ],
             );
           }
         },
       ),
+
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -104,6 +112,7 @@ class _EventListScreenState extends State<EventListScreen>
     );
   }
 
+  //  tadbirlar ro'yxatini yaratadi
   Widget buildEventList(List<Event> events) {
     return ListView.builder(
       itemCount: events.length,
@@ -148,6 +157,7 @@ class _EventListScreenState extends State<EventListScreen>
                   ),
                 ],
               ),
+              //  tadbirni tahrirlash, o'chirish yoki bekor qilish uchun
               trailing: PopupMenuButton<String>(
                 onSelected: (value) async {
                   if (value == 'edit') {
@@ -177,10 +187,6 @@ class _EventListScreenState extends State<EventListScreen>
                     value: 'cancel',
                     child: Text("Bekor qilish"),
                   ),
-                  PopupMenuItem(
-                    value: 'cancel',
-                    child: Text("Ishtirok"),
-                  ),
                 ],
               ),
             ),
@@ -190,10 +196,11 @@ class _EventListScreenState extends State<EventListScreen>
     );
   }
 
+  //  - tadbirni bekor qilish
   Future<void> cancelEvent(Event event) async {
     event.isCancelled = true;
     await Provider.of<FirebaseService>(context, listen: false)
         .updateEvent(event.id as Event, event as File?);
-    setState(() {}); // To refresh the UI
+    setState(() {}); // UI ni yangilash uchun
   }
 }

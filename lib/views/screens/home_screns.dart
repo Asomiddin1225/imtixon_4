@@ -23,77 +23,88 @@ class HomeScreens extends StatefulWidget {
 }
 
 class _HomeScreensState extends State<HomeScreens> {
-  TextEditingController _searchController = TextEditingController();
-  String filterType = 'name';
-  FirebaseService _firebaseService = FirebaseService();
+  TextEditingController _searchController =
+      TextEditingController(); // Qidiruv uchun TextField kontrolleri
+  String filterType = 'name'; // Filtr turi ('name' yoki 'location')
+  FirebaseService _firebaseService =
+      FirebaseService(); // Firebase xizmatlari uchun obyekt
 
-  Future<List<Event>>? _eventsFuture;
+  Future<List<Event>>?
+      _eventsFuture; // Tadbirlar ro'yxati uchun kelajakdagi natija
 
   @override
   void initState() {
     super.initState();
-    _eventsFuture = _firebaseService.getUserEvents();
+    _eventsFuture =
+        _firebaseService.getUserEvents(); // Foydalanuvchi tadbirlarini olish
   }
 
   void _searchEvents() {
+    // Qidiruv funksiyasi
     setState(() {
       if (filterType == 'name') {
-        _eventsFuture =
-            _firebaseService.searchEventsByName(_searchController.text);
+        _eventsFuture = _firebaseService.searchEventsByName(
+            _searchController.text); // Tadbirlarni nomi bo'yicha qidirish
       } else {
-        _eventsFuture =
-            _firebaseService.searchEventsByLocation(_searchController.text);
+        _eventsFuture = _firebaseService.searchEventsByLocation(
+            _searchController.text); // Tadbirlarni joylashuvi bo'yicha qidirish
       }
     });
   }
 
   void _clearSearch() {
+    // Qidiruvni tozalash funksiyasi
     setState(() {
       _searchController.clear();
-      _eventsFuture = _firebaseService.getUserEvents();
+      _eventsFuture = _firebaseService
+          .getUserEvents(); // Foydalanuvchi tadbirlarini qayta yuklash
     });
   }
 
-  void _filterEventsWithin7Days() {
-    setState(() {
-      _eventsFuture = _firebaseService.getEventsWithin7Days();
-    });
-  }
+  // void _filterEventsWithin7Days() {
+  //   // Keyingi 7 kun ichidagi tadbirlarni filtrlash funksiyasi
+  //   setState(() {
+  //     _eventsFuture = _firebaseService.getEventsWithin7Days();
+  //   });
+  // }
 
   void _showFilterDialog() {
+    // Filtr dialogini ko'rsatish funksiyasi
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Filter Options'),
+          title: Text('Filter Options'), // Dialog sarlavhasi
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                title: Text('By event name'.tr()),
+                title: Text('By event name'.tr()), // Tadbir nomi bo'yicha
                 leading: Radio(
                   value: 'name',
                   groupValue: filterType,
                   onChanged: (value) {
                     setState(() {
-                      filterType = value.toString();
-                      _searchEvents();
+                      filterType =
+                          value.toString(); // Filtr turini o'zgartirish
+                      _searchEvents(); // Qidiruvni qayta bajarish
                     });
-                    Navigator.of(context).pop();
+                    Navigator.of(context).pop(); // Dialogni yopish
                   },
                 ),
               ),
               ListTile(
-                title: Text('Manzil bo\'yicha'),
+                title: Text("Manzil bo'yicha"), // Tadbir joylashuvi bo'yicha
                 leading: Radio(
                   value: 'location',
                   groupValue: filterType,
                   onChanged: (value) {
                     setState(() {
-                      filterType = value.toString();
-                      _searchEvents();
+                      filterType =
+                          value.toString(); // Filtr turini o'zgartirish
+                      _searchEvents(); // Qidiruvni qayta bajarish
                     });
-                    Navigator.of(context).pop();
+                    Navigator.of(context).pop(); // Dialogni yopish
                   },
                 ),
               ),
@@ -111,7 +122,7 @@ class _HomeScreensState extends State<HomeScreens> {
         backgroundColor: Colors.orange,
         centerTitle: true,
         title: Text(
-          "Bosh Sahifa",
+          "Main page".tr(),
           style: TextStyle(
               fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
         ),
@@ -142,20 +153,21 @@ class _HomeScreensState extends State<HomeScreens> {
         child: Column(
           children: [
             TextField(
-              controller: _searchController,
+              controller: _searchController, // Qidiruv TextField kontrolleri
               decoration: InputDecoration(
-                hintText: 'Tadbirlarni izlash...',
+                hintText: 'Search for events...'.tr(), // Qidiruv uchun matn
                 prefixIcon: Icon(Icons.search),
                 suffixIcon: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     IconButton(
                       icon: Icon(Icons.filter_list),
-                      onPressed: _showFilterDialog,
+                      onPressed:
+                          _showFilterDialog, // Filtr dialogini ko'rsatish
                     ),
                     IconButton(
                       icon: Icon(Icons.clear),
-                      onPressed: _clearSearch,
+                      onPressed: _clearSearch, // Qidiruvni tozalash
                     ),
                   ],
                 ),
@@ -165,13 +177,12 @@ class _HomeScreensState extends State<HomeScreens> {
               ),
               onChanged: (value) {
                 setState(() {
-                  _searchEvents();
+                  _searchEvents(); // Qidiruvni bajarish
                 });
               },
             ),
             SizedBox(height: 10),
             Expanded(
-              // child:
               child: EventListWidget(eventsFuture: _eventsFuture!),
             ),
           ],
